@@ -25,7 +25,7 @@ local Window = Rayfield:CreateWindow({
         FileName = "sillyscriptkey",
         SaveKey = false,
         GrabKeyFromSite = false,
-        Key = {"sillycatisthebestfrfr","fastkey","androidmarryme","fuckthatniggaKIRA"}
+        Key = {"sillycatisthebestfrfr","fastkey","YoFuckAndroidToo","fuckthatniggaKIRA"}
     }
 })
 
