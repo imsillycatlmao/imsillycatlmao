@@ -62,7 +62,7 @@ end
 createScriptButton("Join the discord!", 0, function()
     print("Discord link: https://discord.gg/NF2Pvx4abM")
     
-    -- Optionally show a message or pop-up (if using a GUI)
+    
     local message = Instance.new("TextLabel")
     message.Parent = ScreenGui
     message.Size = UDim2.new(0, 300, 0, 50)
