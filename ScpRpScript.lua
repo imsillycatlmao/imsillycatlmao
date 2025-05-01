@@ -137,6 +137,13 @@ circle.Color = Color3.fromRGB(173, 0, 230)
 circle.Thickness = 5
 circle.Position = Vector2.new(workspace.CurrentCamera.ViewportSize.X / 2, workspace.CurrentCamera.ViewportSize.Y / 2)
 
+local targetHighlight = Drawing.new("Square")
+targetHighlight.Visible = false
+targetHighlight.Thickness = 2
+targetHighlight.Color = Color3.fromRGB(255, 85, 255) 
+targetHighlight.Transparency = 1
+
+
 local function findNearestToCursor()
     local players = game:GetService("Players")
     local localPlayer = players.LocalPlayer
@@ -180,10 +187,26 @@ RunService.RenderStepped:Connect(function()
             local targetPosition = nearestPlayer.Position
             local cameraPosition = camera.CFrame.Position
 
+            
             camera.CFrame = CFrame.new(cameraPosition, targetPosition)
+
+            
+            local screenPos, onScreen = camera:WorldToViewportPoint(nearestPlayer.Position)
+            if onScreen then
+                targetHighlight.Position = Vector2.new(screenPos.X - 15, screenPos.Y - 15)
+                targetHighlight.Size = Vector2.new(30, 30)
+                targetHighlight.Visible = true
+            else
+                targetHighlight.Visible = false
+            end
+        else
+            targetHighlight.Visible = false
         end
+    else
+        targetHighlight.Visible = false
     end
 end)
+
 
 
 ToggleButton.MouseButton1Click:Connect(function()
