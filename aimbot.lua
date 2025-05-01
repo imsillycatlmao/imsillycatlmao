@@ -1,43 +1,5 @@
+-- bleh
 local aimTrackingEnabled = false
-local whitelistedTeams = {}
-
-
-local TeamDropdown = Instance.new("Frame")
-TeamDropdown.Parent = ScreenGui
-TeamDropdown.Size = UDim2.new(0, 200, 0, 160)
-TeamDropdown.Position = UDim2.new(0.5, -100, 0, 100)
-TeamDropdown.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-TeamDropdown.BackgroundTransparency = 0.2
-TeamDropdown.BorderSizePixel = 0
-
-local TeamList = Instance.new("UIListLayout", TeamDropdown)
-TeamList.Padding = UDim.new(0, 4)
-
-
-for _, team in ipairs(game:GetService("Teams"):GetTeams()) do
-    local TeamToggle = Instance.new("TextButton")
-    TeamToggle.Parent = TeamDropdown
-    TeamToggle.Size = UDim2.new(1, 0, 0, 30)
-    TeamToggle.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    TeamToggle.TextColor3 = Color3.new(1, 1, 1)
-    TeamToggle.Font = Enum.Font.Gotham
-    TeamToggle.TextSize = 18
-    TeamToggle.Text = "Whitelist: " .. team.Name
-    TeamToggle.AutoButtonColor = true
-
-    local toggled = false
-    TeamToggle.MouseButton1Click:Connect(function()
-        toggled = not toggled
-        if toggled then
-            whitelistedTeams[team] = true
-            TeamToggle.BackgroundColor3 = Color3.fromRGB(0, 255, 127) -
-        else
-            whitelistedTeams[team] = nil
-            TeamToggle.BackgroundColor3 = Color3.fromRGB(40, 40, 40) 
-        end
-    end)
-end
-
 
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
@@ -99,7 +61,7 @@ local function findNearestToCursor()
     local shortestScreenDistance = math.huge
 
     for _, player in pairs(players:GetPlayers()) do
-        if player ~= localPlayer and not whitelistedTeams[player.Team] and player.Character and player.Character:FindFirstChild("Head") then
+        if player ~= localPlayer and player.Team ~= localTeam and player.Character and player.Character:FindFirstChild("Head") then
             local head = player.Character.Head
             local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
 
