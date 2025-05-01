@@ -6,20 +6,40 @@ ScreenGui.Name = "AimTrackingGui"
 
 local ToggleButton = Instance.new("TextButton")
 ToggleButton.Parent = ScreenGui
-ToggleButton.Size = UDim2.new(0, 200, 0, 50)
-ToggleButton.Position = UDim2.new(0.5, -100, 0, 10)
-ToggleButton.Text = "Toggle Aim Tracking: OFF"
+ToggleButton.Size = UDim2.new(0, 220, 0, 60)
+ToggleButton.Position = UDim2.new(0.5, -110, 0, 20)
+ToggleButton.Text = "Aimbot: OFF"
 ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
 ToggleButton.TextColor3 = Color3.new(1, 1, 1)
-ToggleButton.Font = Enum.Font.SourceSans
-ToggleButton.TextSize = 20
-ToggleButton.BorderSizePixel = 2
-ToggleButton.BorderColor3 = Color3.new(0, 0, 0)
+ToggleButton.Font = Enum.Font.GothamBold
+ToggleButton.TextSize = 24
+ToggleButton.BorderSizePixel = 0
+ToggleButton.BackgroundTransparency = 0.2
+ToggleButton.TextTransparency = 0
+ToggleButton.AutoButtonColor = false
+
+
+local gradient = Instance.new("UIGradient")
+gradient.Parent = ToggleButton
+gradient.Color = ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 170, 255)), ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 255, 127))})
+gradient.Rotation = 45
+
+
+local buttonShadow = Instance.new("Frame")
+buttonShadow.Parent = ToggleButton
+buttonShadow.AnchorPoint = Vector2.new(0.5, 0.5)
+buttonShadow.Position = UDim2.new(0.5, 4, 0.5, 4)
+buttonShadow.Size = UDim2.new(1, 0, 1, 0)
+buttonShadow.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+buttonShadow.BackgroundTransparency = 0.6
+buttonShadow.BorderSizePixel = 0
+buttonShadow.ZIndex = -1
+
 
 local circle = Drawing.new("Circle")
 circle.Visible = false
 circle.Radius = 175 
-circle.Color = Color3.new(1, 0, 0) 
+circle.Color = Color3.fromRGB(173, 0, 230) 
 circle.Thickness = 5
 circle.Position = Vector2.new(workspace.CurrentCamera.ViewportSize.X / 2, workspace.CurrentCamera.ViewportSize.Y / 2)
 
@@ -35,21 +55,26 @@ local function findNearestToCursor()
     for _, player in pairs(players:GetPlayers()) do
         if player ~= localPlayer and player.Team ~= localTeam and player.Character and player.Character:FindFirstChild("Head") then
             local head = player.Character.Head
-            local screenPoint = camera:WorldToViewportPoint(head.Position)
-            local screenPos = Vector2.new(screenPoint.X, screenPoint.Y)
-            local distance = (screenPos - centerScreen).Magnitude
+            local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
 
-            local ray = Ray.new(camera.CFrame.Position, (head.Position - camera.CFrame.Position).Unit * 500)
-            local hitPart = workspace:FindPartOnRayWithIgnoreList(ray, {localPlayer.Character})
+            if humanoid and humanoid.Health > 1 then 
+                local screenPoint = camera:WorldToViewportPoint(head.Position)
+                local screenPos = Vector2.new(screenPoint.X, screenPoint.Y)
+                local distance = (screenPos - centerScreen).Magnitude
 
-            if hitPart and hitPart:IsDescendantOf(player.Character) and distance < shortestScreenDistance then
-                shortestScreenDistance = distance
-                nearestPlayer = head
+                local ray = Ray.new(camera.CFrame.Position, (head.Position - camera.CFrame.Position).Unit * 500)
+                local hitPart = workspace:FindPartOnRayWithIgnoreList(ray, {localPlayer.Character})
+
+                if hitPart and hitPart:IsDescendantOf(player.Character) and distance < shortestScreenDistance then
+                    shortestScreenDistance = distance
+                    nearestPlayer = head
+                end
             end
         end
     end
     return nearestPlayer
 end
+
 
 local RunService = game:GetService("RunService")
 
@@ -66,18 +91,19 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 
+
 ToggleButton.MouseButton1Click:Connect(function()
     aimTrackingEnabled = not aimTrackingEnabled
-    ToggleButton.Text = "aimbotON/OFF: " .. (aimTrackingEnabled and "ON" or "OFF")
+    ToggleButton.Text = "Aimbot: " .. (aimTrackingEnabled and "ON" or "OFF")
     ToggleButton.BackgroundColor3 = aimTrackingEnabled and Color3.fromRGB(0, 255, 127) or Color3.fromRGB(0, 170, 255)
     circle.Visible = aimTrackingEnabled
 end)
 
 game:GetService("UserInputService").InputBegan:Connect(function(input, isProcessed)
     if isProcessed then return end
-    if input.KeyCode == Enum.KeyCode.L then
+    if input.KeyCode == Enum.KeyCode.B then
         aimTrackingEnabled = not aimTrackingEnabled
-        ToggleButton.Text = "aimbotON/OFF: " .. (aimTrackingEnabled and "ON" or "OFF")
+        ToggleButton.Text = "Aimbot:" .. (aimTrackingEnabled and "ON" or "OFF")
         ToggleButton.BackgroundColor3 = aimTrackingEnabled and Color3.fromRGB(0, 255, 127) or Color3.fromRGB(0, 170, 255)
         circle.Visible = aimTrackingEnabled
     end
