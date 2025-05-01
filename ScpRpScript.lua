@@ -148,21 +148,26 @@ local function findNearestToCursor()
     for _, player in pairs(players:GetPlayers()) do
         if player ~= localPlayer and player.Team ~= localTeam and player.Character and player.Character:FindFirstChild("Head") then
             local head = player.Character.Head
-            local screenPoint = camera:WorldToViewportPoint(head.Position)
-            local screenPos = Vector2.new(screenPoint.X, screenPoint.Y)
-            local distance = (screenPos - centerScreen).Magnitude
+            local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
 
-            local ray = Ray.new(camera.CFrame.Position, (head.Position - camera.CFrame.Position).Unit * 500)
-            local hitPart = workspace:FindPartOnRayWithIgnoreList(ray, {localPlayer.Character})
+            if humanoid and humanoid.Health > 1 then 
+                local screenPoint = camera:WorldToViewportPoint(head.Position)
+                local screenPos = Vector2.new(screenPoint.X, screenPoint.Y)
+                local distance = (screenPos - centerScreen).Magnitude
 
-            if hitPart and hitPart:IsDescendantOf(player.Character) and distance < shortestScreenDistance then
-                shortestScreenDistance = distance
-                nearestPlayer = head
+                local ray = Ray.new(camera.CFrame.Position, (head.Position - camera.CFrame.Position).Unit * 500)
+                local hitPart = workspace:FindPartOnRayWithIgnoreList(ray, {localPlayer.Character})
+
+                if hitPart and hitPart:IsDescendantOf(player.Character) and distance < shortestScreenDistance then
+                    shortestScreenDistance = distance
+                    nearestPlayer = head
+                end
             end
         end
     end
     return nearestPlayer
 end
+
 
 local RunService = game:GetService("RunService")
 
