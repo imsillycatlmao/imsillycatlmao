@@ -189,7 +189,7 @@ end)
 
 game:GetService("UserInputService").InputBegan:Connect(function(input, isProcessed)
     if isProcessed then return end
-    if input.KeyCode == Enum.KeyCode.L then
+    if input.KeyCode == Enum.KeyCode.B then
         aimTrackingEnabled = not aimTrackingEnabled
         ToggleButton.Text = "Aimbot:" .. (aimTrackingEnabled and "ON" or "OFF")
         ToggleButton.BackgroundColor3 = aimTrackingEnabled and Color3.fromRGB(0, 255, 127) or Color3.fromRGB(0, 170, 255)
