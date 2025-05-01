@@ -1,3 +1,4 @@
+--HI HI HEY HIIII -me, 2025
 local ScreenGui = Instance.new("ScreenGui")
 local MainFrame = Instance.new("Frame")
 local UICorner = Instance.new("UICorner")
