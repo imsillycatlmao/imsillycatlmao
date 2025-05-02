@@ -139,7 +139,7 @@ tabs = {
     }}
 }
 
--- Create the tabs
+
 for i, tabData in pairs(tabs) do
     createTab(tabData[1], (i - 1) * 50, tabData[2])
 end
