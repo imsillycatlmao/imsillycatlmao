@@ -1,4 +1,4 @@
--- By silly cat (or "imsillycat" on Discord)
+
 local ScreenGui = Instance.new("ScreenGui")
 local MainFrame = Instance.new("Frame")
 local UICorner = Instance.new("UICorner")
@@ -9,7 +9,6 @@ local UIGradient = Instance.new("UIGradient")
 
 ScreenGui.Parent = game.CoreGui
 
--- MainFrame Setup
 MainFrame.Parent = ScreenGui
 MainFrame.BackgroundColor3 = Color3.fromRGB(50, 0, 90)
 MainFrame.Size = UDim2.new(0, 400, 0, 300) -- Wider
@@ -20,14 +19,14 @@ MainFrame.Draggable = true
 UICorner.CornerRadius = UDim.new(0, 10)
 UICorner.Parent = MainFrame
 
--- Apply Gradient to MainFrame
+
 UIGradient.Color = ColorSequence.new{
     ColorSequenceKeypoint.new(0, Color3.fromRGB(80, 0, 160)),
     ColorSequenceKeypoint.new(1, Color3.fromRGB(30, 0, 90))
 }
 UIGradient.Parent = MainFrame
 
--- Title
+
 Title.Parent = MainFrame
 Title.Size = UDim2.new(1, 0, 0, 30)
 Title.BackgroundTransparency = 1
@@ -36,19 +35,18 @@ Title.TextColor3 = Color3.fromRGB(200, 200, 255)
 Title.Font = Enum.Font.GothamBold
 Title.TextSize = 16
 
--- Tab Container
+
 TabContainer.Parent = MainFrame
 TabContainer.Size = UDim2.new(0, 80, 1, -40)
 TabContainer.Position = UDim2.new(0, 0, 0, 40)
 TabContainer.BackgroundColor3 = Color3.fromRGB(30, 30, 60)
 
--- ScriptButtonsContainer
 ScriptButtonsContainer.Parent = MainFrame
 ScriptButtonsContainer.Size = UDim2.new(1, -90, 0, 200)
 ScriptButtonsContainer.Position = UDim2.new(0, 90, 0, 40)
 ScriptButtonsContainer.BackgroundColor3 = Color3.fromRGB(20, 30, 60)
 
--- Function to create buttons
+
 local function createScriptButton(name, positionY, callback, parent)
     local ScriptButton = Instance.new("TextButton")
     ScriptButton.Parent = parent
@@ -64,7 +62,7 @@ local function createScriptButton(name, positionY, callback, parent)
     ButtonCorner.CornerRadius = UDim.new(0, 8)
     ButtonCorner.Parent = ScriptButton
     
-    -- Apply Gradient to Buttons
+
     local ButtonGradient = Instance.new("UIGradient")
     ButtonGradient.Color = ColorSequence.new{
         ColorSequenceKeypoint.new(0, Color3.fromRGB(140, 0, 240)),
@@ -72,7 +70,7 @@ local function createScriptButton(name, positionY, callback, parent)
     }
     ButtonGradient.Parent = ScriptButton
     
-    -- Hover effect
+
     ScriptButton.MouseEnter:Connect(function()
         ButtonGradient.Color = ColorSequence.new{
             ColorSequenceKeypoint.new(0, Color3.fromRGB(160, 30, 255)),
@@ -90,7 +88,6 @@ local function createScriptButton(name, positionY, callback, parent)
     return ScriptButton
 end
 
--- Function to create tab buttons
 local function createTab(name, positionY, scripts)
     local TabButton = Instance.new("TextButton")
     TabButton.Parent = TabContainer
@@ -121,7 +118,6 @@ local function createTab(name, positionY, scripts)
     return TabButton
 end
 
--- Define tabs and their scripts
 tabs = {
     {"Main", {
         {"silly", function() print("Please help me i am going insane -Silly cat") end},
