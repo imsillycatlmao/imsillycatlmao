@@ -1,18 +1,20 @@
---hi -silly cat
 local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
 
 
 local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "SillyCatUI"
 ScreenGui.Parent = game.CoreGui
 
 
 local LogoFrame = Instance.new("Frame")
-LogoFrame.Size = UDim2.new(0, 450, 0, 350)  
-LogoFrame.Position = UDim2.new(0.5, -225, 0.5, -175)  
+LogoFrame.Size = UDim2.new(0, 500, 0, 400)  
+LogoFrame.Position = UDim2.new(0.5, -250, 0.5, -200)
 LogoFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
 LogoFrame.BackgroundTransparency = 0
 LogoFrame.ZIndex = 10
 LogoFrame.Parent = ScreenGui
+
 
 local UICorner = Instance.new("UICorner")
 UICorner.CornerRadius = UDim.new(0, 16) 
@@ -35,6 +37,31 @@ blur.Size = 12
 blur.Parent = game:GetService("Lighting")
 
 
+task.delay(2.5, function()
+    
+    local textTween = TweenService:Create(LogoLabel, TweenInfo.new(1, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {
+        TextTransparency = 1
+    })
+
+    
+    local frameTween = TweenService:Create(LogoFrame, TweenInfo.new(1, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {
+        BackgroundTransparency = 1
+    })
+
+    
+    textTween:Play()
+    frameTween:Play()
+
+    
+    textTween.Completed:Connect(function()
+        
+        if frameTween.Completed then
+            LogoFrame:Destroy()  
+        end
+    end)
+end)
+
+
 task.delay(5, function()
     if blur then
         blur:Destroy()
@@ -42,136 +69,195 @@ task.delay(5, function()
 end)
 
 
-
-local MainFrame = Instance.new("Frame")
-MainFrame.Parent = ScreenGui
-MainFrame.BackgroundColor3 = Color3.fromRGB(31, 31, 46)
-MainFrame.Size = UDim2.new(0, 400, 0, 300)
-MainFrame.Position = UDim2.new(0.5, -200, 0.5, -180)
-MainFrame.Active = true
-MainFrame.Draggable = true
-MainFrame.BackgroundTransparency = 1
-
-local UICorner = Instance.new("UICorner")
-UICorner.CornerRadius = UDim.new(0, 10)
-UICorner.Parent = MainFrame
-
-local Title = Instance.new("TextLabel")
-Title.Parent = MainFrame
-Title.Size = UDim2.new(1, 0, 0, 30)
-Title.BackgroundTransparency = 1
-Title.Text = "Free UI, by silly cat"
-Title.TextColor3 = Color3.fromRGB(214, 214, 244)
-Title.Font = Enum.Font.GothamBold
-Title.TextSize = 16
-
-local TabContainer = Instance.new("Frame")
-TabContainer.Parent = MainFrame
-TabContainer.Size = UDim2.new(0, 80, 1, -40)
-TabContainer.Position = UDim2.new(0, 0, 0, 40)
-TabContainer.BackgroundColor3 = Color3.fromRGB(40, 40, 60)
-
-local ScriptButtonsContainer = Instance.new("Frame")
-ScriptButtonsContainer.Parent = MainFrame
-ScriptButtonsContainer.Size = UDim2.new(1, -90, 0, 200)
-ScriptButtonsContainer.Position = UDim2.new(0, 90, 0, 40)
-ScriptButtonsContainer.BackgroundColor3 = Color3.fromRGB(35, 35, 55)
-
-
-local function createScriptButton(name, positionY, callback, parent)
-    local ScriptButton = Instance.new("TextButton")
-    ScriptButton.Parent = parent
-    ScriptButton.Size = UDim2.new(0.9, 0, 0, 40)
-    ScriptButton.Position = UDim2.new(0.05, 0, 0, positionY)
-    ScriptButton.BackgroundColor3 = Color3.fromRGB(108, 77, 230)
-    ScriptButton.Text = name
-    ScriptButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    ScriptButton.Font = Enum.Font.Gotham
-    ScriptButton.TextSize = 14
-
-    local ButtonCorner = Instance.new("UICorner")
-    ButtonCorner.CornerRadius = UDim.new(0, 8)
-    ButtonCorner.Parent = ScriptButton
-
-    ScriptButton.MouseEnter:Connect(function()
-        TweenService:Create(ScriptButton, TweenInfo.new(0.2), {
-            BackgroundColor3 = Color3.fromRGB(155, 109, 255)
-        }):Play()
-    end)
-    ScriptButton.MouseLeave:Connect(function()
-        TweenService:Create(ScriptButton, TweenInfo.new(0.2), {
-            BackgroundColor3 = Color3.fromRGB(108, 77, 230)
-        }):Play()
-    end)
-
-    ScriptButton.MouseButton1Click:Connect(callback)
-    return ScriptButton
-end
-
-
-local function createTab(name, positionY, scripts)
-    local TabButton = Instance.new("TextButton")
-    TabButton.Parent = TabContainer
-    TabButton.Size = UDim2.new(1, 0, 0, 40)
-    TabButton.Position = UDim2.new(0, 0, 0, positionY)
-    TabButton.BackgroundColor3 = Color3.fromRGB(50, 50, 100)
-    TabButton.Text = name
-    TabButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    TabButton.Font = Enum.Font.Gotham
-    TabButton.TextSize = 14
-
-    local ButtonCorner = Instance.new("UICorner")
-    ButtonCorner.CornerRadius = UDim.new(0, 6)
-    ButtonCorner.Parent = TabButton
-
-    TabButton.MouseButton1Click:Connect(function()
-        for _, child in pairs(ScriptButtonsContainer:GetChildren()) do
-            if child:IsA("TextButton") then
-                child:Destroy()
-            end
-        end
-
-        for i, scriptData in pairs(scripts) do
-            createScriptButton(scriptData[1], (i - 1) * 50, scriptData[2], ScriptButtonsContainer)
-        end
-    end)
-
-    return TabButton
-end
-
-local tabs = {
-    {"Main", {
-        {"silly", function() print("illy cat") end},
-        {"something", function() print("idk") end},
-        {"poop1", function() print("Pooping...") end},
-        {"okay!", function() print("Abc") end}
-    }},
-    {"Extra", {
-        {"extra1", function() print("Extra script 1") end},
-        {"extra2", function() print("Extra script 2") end}
-    }},
-    {"Advanced", {
-        {"hack1", function() print("Advanced hack 1") end},
-        {"hack2", function() print("Advanced hack 2") end}
-    }},
-    {"Misc", {
-        {"fun1", function() print("Fun script 1") end},
-        {"fun2", function() print("Fun script 2") end}
-    }}
+local Theme = {
+	Background = Color3.fromRGB(28, 28, 42),
+	Accent = Color3.fromRGB(108, 77, 230),
+	AccentHover = Color3.fromRGB(145, 105, 255),
+	Text = Color3.fromRGB(255, 255, 255),
+	Tab = Color3.fromRGB(40, 40, 60),
+	TabSelected = Color3.fromRGB(90, 80, 140),
+	Glass = Color3.fromRGB(20, 20, 30)
 }
 
 
-for i, tabData in pairs(tabs) do
-    createTab(tabData[1], (i - 1) * 50, tabData[2])
+local MainFrame = Instance.new("Frame")
+MainFrame.Parent = ScreenGui
+MainFrame.Size = UDim2.new(0, 460, 0, 330)
+MainFrame.Position = UDim2.new(0.5, -230, 0.5, -165)
+MainFrame.BackgroundColor3 = Theme.Background
+MainFrame.BackgroundTransparency = 0.1
+MainFrame.Active = true
+MainFrame.Draggable = false
+
+local corner = Instance.new("UICorner", MainFrame)
+corner.CornerRadius = UDim.new(0, 12)
+
+
+local dragging, dragInput, dragStart, startPos
+local offset = Vector2.new()
+
+MainFrame.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		dragging = true
+		dragStart = input.Position
+		startPos = MainFrame.Position
+	end
+end)
+
+MainFrame.InputChanged:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseMovement then
+		dragInput = input
+	end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+	if input == dragInput and dragging then
+		offset = input.Position - dragStart
+		local goalPos = UDim2.new(startPos.X.Scale, startPos.X.Offset + offset.X, startPos.Y.Scale, startPos.Y.Offset + offset.Y)
+		TweenService:Create(MainFrame, TweenInfo.new(0.15, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {
+			Position = goalPos
+		}):Play()
+	end
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		dragging = false
+	end
+end)
+
+
+local Title = Instance.new("TextLabel", MainFrame)
+Title.Size = UDim2.new(1, -40, 0, 30)
+Title.Position = UDim2.new(0, 10, 0, 5)
+Title.Text = "🌌 Silly Cat UI 🌌"
+Title.BackgroundTransparency = 1
+Title.TextColor3 = Theme.Text
+Title.TextSize = 20
+Title.Font = Enum.Font.GothamBold
+
+
+local Close = Instance.new("TextButton", MainFrame)
+Close.Size = UDim2.new(0, 25, 0, 25)
+Close.Position = UDim2.new(1, -30, 0, 5)
+Close.Text = "X"
+Close.Font = Enum.Font.GothamBold
+Close.TextColor3 = Theme.Text
+Close.BackgroundColor3 = Theme.Accent
+Instance.new("UICorner", Close).CornerRadius = UDim.new(0, 6)
+Close.MouseButton1Click:Connect(function()
+	MainFrame:Destroy()
+end)
+
+
+local TabContainer = Instance.new("Frame", MainFrame)
+TabContainer.Size = UDim2.new(0, 90, 1, -50)
+TabContainer.Position = UDim2.new(0, 0, 0, 40)
+TabContainer.BackgroundColor3 = Theme.Tab
+Instance.new("UICorner", TabContainer).CornerRadius = UDim.new(0, 8)
+
+
+local Selector = Instance.new("Frame", TabContainer)
+Selector.Size = UDim2.new(0, 5, 0, 40)
+Selector.Position = UDim2.new(1, -5, 0, 0)
+Selector.BackgroundColor3 = Theme.Accent
+Selector.Visible = false
+
+
+local ContentArea = Instance.new("Frame", MainFrame)
+ContentArea.Size = UDim2.new(1, -100, 1, -50)
+ContentArea.Position = UDim2.new(0, 100, 0, 40)
+ContentArea.BackgroundColor3 = Theme.Glass
+Instance.new("UICorner", ContentArea).CornerRadius = UDim.new(0, 8)
+
+
+local function fadeChildren(fadeOut)
+	for _, child in ipairs(ContentArea:GetChildren()) do
+		if child:IsA("GuiObject") then
+			TweenService:Create(child, TweenInfo.new(0.25), {
+				BackgroundTransparency = fadeOut and 1 or 0,
+				TextTransparency = fadeOut and 1 or 0
+			}):Play()
+		end
+	end
 end
 
-task.wait(2)
-TweenService:Create(LogoFrame, TweenInfo.new(1), {BackgroundTransparency = 1}):Play()
-TweenService:Create(LogoLabel, TweenInfo.new(1), {TextTransparency = 1}):Play()
-task.wait(1)
-LogoFrame:Destroy()
 
-TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-    BackgroundTransparency = 0,
-    Position = UDim2.new(0.5, -200, 0.5, -150)
-}):Play()
+local function createTab(name, scripts, posY)
+	local tab = Instance.new("TextButton", TabContainer)
+	tab.Size = UDim2.new(1, 0, 0, 40)
+	tab.Position = UDim2.new(0, 0, 0, posY)
+	tab.Text = name
+	tab.BackgroundColor3 = Theme.Tab
+	tab.TextColor3 = Theme.Text
+	tab.Font = Enum.Font.Gotham
+	tab.TextSize = 14
+	Instance.new("UICorner", tab).CornerRadius = UDim.new(0, 6)
+
+	tab.MouseButton1Click:Connect(function()
+		Selector.Visible = true
+		TweenService:Create(Selector, TweenInfo.new(0.2), {
+			Position = UDim2.new(1, -5, 0, posY)
+		}):Play()
+
+		fadeChildren(true)
+		task.wait(0.25)
+		for _, c in pairs(ContentArea:GetChildren()) do
+			if c:IsA("GuiObject") then c:Destroy() end
+		end
+
+		for i, data in pairs(scripts) do
+			local btn = Instance.new("TextButton", ContentArea)
+			btn.Size = UDim2.new(0.9, 0, 0, 35)
+			btn.Position = UDim2.new(0.05, 0, 0, (i-1) * 45)
+			btn.Text = data[1]
+			btn.Font = Enum.Font.Gotham
+			btn.TextSize = 14
+			btn.TextColor3 = Theme.Text
+			btn.BackgroundColor3 = Theme.Accent
+			btn.AutoButtonColor = false
+			Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 6)
+
+			btn.MouseEnter:Connect(function()
+				TweenService:Create(btn, TweenInfo.new(0.2), {
+					BackgroundColor3 = Theme.AccentHover
+				}):Play()
+			end)
+			btn.MouseLeave:Connect(function()
+				TweenService:Create(btn, TweenInfo.new(0.2), {
+					BackgroundColor3 = Theme.Accent
+				}):Play()
+			end)
+
+			btn.MouseButton1Click:Connect(data[2])
+		end
+		fadeChildren(false)
+	end)
+end
+
+
+local tabs = {
+	{"Main", {
+		{"Silly Action", function() print("Magw") end},
+		{"Cool Thing", function() print("Wow") end},
+		{"hjegri", function() print("pohf") end},
+		{"Abc", function() print("abc") end}
+	}},
+	{"Extra", {
+		{"Extra 1", function() print("Extra script 1") end},
+		{"Extra 2", function() print("Extra script 2") end},
+	}},
+	{"Advanced", {
+		{"Hack 1", function() print("Advanced 1") end},
+		{"Hack 2", function() print("Advanced 2") end},
+	}},
+	{"Misc", {
+		{"Fun 1", function() print("Fun script 1") end},
+		{"Fun 2", function() print("Fun script 2") end},
+	}}
+}
+
+
+for i, tabData in ipairs(tabs) do
+	createTab(tabData[1], tabData[2], (i - 1) * 45)
+end
