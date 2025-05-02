@@ -114,7 +114,7 @@ UserInputService.InputChanged:Connect(function(input)
 	if input == dragInput and dragging then
 		offset = input.Position - dragStart
 		local goalPos = UDim2.new(startPos.X.Scale, startPos.X.Offset + offset.X, startPos.Y.Scale, startPos.Y.Offset + offset.Y)
-		TweenService:Create(MainFrame, TweenInfo.new(0.15, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {
+		TweenService:Create(MainFrame, TweenInfo.new(0.25, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), { --btw you can change "0.25" to diffrent numbers to see what you like :D
 			Position = goalPos
 		}):Play()
 	end
