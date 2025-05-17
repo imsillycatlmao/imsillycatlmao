@@ -1,4 +1,5 @@
--- bleh
+
+--PATCHED IN SCP ROLEPLAY, WORKING ON A NEW SCRIPT CURRENTLY
 local aimTrackingEnabled = false
 
 local ScreenGui = Instance.new("ScreenGui")
